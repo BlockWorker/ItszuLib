@@ -4,9 +4,9 @@ import java.io.File
 import java.util.UUID
 
 import com.itszuvalex.itszulib.configuration.xml.XMLLoaderWriter
-import cpw.mods.fml.common.FMLCommonHandler
-import cpw.mods.fml.common.eventhandler.SubscribeEvent
-import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent
+import net.minecraftforge.fml.common.FMLCommonHandler
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent
 
 import scala.collection.mutable
 
@@ -56,6 +56,6 @@ object PlayerUUIDTracker {
 
   @SubscribeEvent
   def onPlayerLogin(event: PlayerLoggedInEvent) = {
-    addMapping(event.player.getUniqueID, event.player.getCommandSenderName)
+    addMapping(event.player.getUniqueID, event.player.getDisplayNameString)
   }
 }

@@ -4,6 +4,7 @@ import com.itszuvalex.itszulib.api.core.{Loc4, Saveable}
 import com.itszuvalex.itszulib.api.multiblock.{IMultiBlockComponent, MultiBlockInfo}
 import com.itszuvalex.itszulib.core.TileEntityBase
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.util.BlockPos
 import net.minecraft.world.World
 
 /**
@@ -14,10 +15,10 @@ trait MultiBlockComponent extends TileEntityBase with IMultiBlockComponent {
 
   def isValidMultiBlock = info.isValidMultiBlock
 
-  def formMultiBlock(world: World, x: Int, y: Int, z: Int): Boolean = {
-    val result = info.formMultiBlock(world, x, y, z)
-    getWorldObj.markBlockForUpdate(xCoord, yCoord, zCoord)
-    getWorldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, getWorldObj.getBlock(xCoord, yCoord, zCoord))
+  def formMultiBlock(world: World, pos: BlockPos): Boolean = {
+    val result = info.formMultiBlock(world, pos)
+    worldObj.markBlockForUpdate(getPos)
+    worldObj.notifyNeighborsOfStateChange(getPos, worldObj.getBlockState(getPos).getBlock)
     result
   }
 
@@ -26,10 +27,10 @@ trait MultiBlockComponent extends TileEntityBase with IMultiBlockComponent {
     setRenderUpdate()
   }
 
-  def breakMultiBlock(world: World, x: Int, y: Int, z: Int): Boolean = {
-    val result = info.breakMultiBlock(world, x, y, z)
-    getWorldObj.markBlockForUpdate(xCoord, yCoord, zCoord)
-    getWorldObj.notifyBlocksOfNeighborChange(xCoord, yCoord, zCoord, getWorldObj.getBlock(xCoord, yCoord, zCoord))
+  def breakMultiBlock(world: World, pos: BlockPos): Boolean = {
+    val result = info.breakMultiBlock(world, pos)
+    worldObj.markBlockForUpdate(getPos)
+    worldObj.notifyNeighborsOfStateChange(getPos, worldObj.getBlockState(getPos).getBlock)
     result
   }
 
@@ -37,7 +38,7 @@ trait MultiBlockComponent extends TileEntityBase with IMultiBlockComponent {
 
   def forwardToDifferentController[B, T](f: T => B): B = {
     if (isValidMultiBlock)
-      Loc4(info.x, info.y, info.z, getWorldObj.provider.dimensionId).getTileEntity(true) match {
+      Loc4(info.getControllerPos, worldObj.provider.getDimensionId).getTileEntity(true) match {
         case Some(a) if a.isInstanceOf[T] => return f(a.asInstanceOf[T])
         case _                            =>
       }
@@ -46,12 +47,12 @@ trait MultiBlockComponent extends TileEntityBase with IMultiBlockComponent {
 
   def forwardToController[B](f: this.type => B): B = {
     if (isValidMultiBlock)
-      Loc4(info.x, info.y, info.z, getWorldObj.provider.dimensionId).getTileEntity(true) match {
+      Loc4(info.getControllerPos, worldObj.provider.getDimensionId).getTileEntity(true) match {
         case Some(a) if a.isInstanceOf[this.type] => return f(a.asInstanceOf[this.type])
         case _                                    =>
       }
     null.asInstanceOf[B]
   }
 
-  def isController = info.isController(xCoord, yCoord, zCoord)
+  def isController = info.isController(getPos)
 }

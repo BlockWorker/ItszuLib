@@ -34,7 +34,7 @@ project.ext {
     massive = "0"
     major = "1"
     minor = "0"
-    mcVersion = "1.7.10"
+    mcVersion = "1.8"
 }
 
 version = "${project.ext.mcVersion}-${project.ext.massive}.${project.ext.major}.${project.minor}"
@@ -50,15 +50,15 @@ if (System.getenv().CIRCLE_BRANCH != null && !System.getenv().CIRCLE_BRANCH.equa
 }
 
 compileScala {
-    sourceCompatibility = 1.7
-    targetCompatibility = 1.7
+    sourceCompatibility = 1.8
+    targetCompatibility = 1.8
 }
 
 group = "com.itszuvalex.itszulib" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "itszulib"
 
 minecraft {
-    version = "${project.ext.mcVersion}-10.13.4.1448-${project.ext.mcVersion}"
+    version = "${project.ext.mcVersion}-11.14.3.1450"
     runDir = "eclipse"
 // replacing stuff in the source
     replace '@MASSIVE@', project.massive
@@ -197,52 +197,52 @@ gitPublishConfig {
 
 publishing {
 
-    publications {
-
-        mod(MavenPublication) {
-            groupId group
-            version project.version
-
-            artifact jar.outputs.files.iterator().next()
-        }
-        api(MavenPublication) {
-            groupId group
-            version project.version
-
-            artifact apiJar {
-                classifier "api"
-            }
-        }
-        src(MavenPublication) {
-          groupId group
-          version project.version
-
-          artifact jarSource {
-            classifier "src"
-          }
-        }
-        deobf(MavenPublication) {
-          groupId group
-          version project.version
-
-          artifact jarDeobf {
-            classifier 'deobf'
-          }
-        }
-        scalaDoc(MavenPublication) {
-            groupId group
-            version project.version
-
-            artifact jarApiScalaDoc {
-                classifier "api-scaladoc"
-            }
-        }
-    }
-    repositories {
-        maven {
-            url "file://${gitPublishConfig.home}/${gitPublishConfig.org}/${gitPublishConfig.repo}/releases"
-        }
-    }
+//    publications {
+//
+//        mod(MavenPublication) {
+//            groupId group
+//            version project.version
+//
+//            artifact jar.outputs.files.iterator().next()
+//        }
+//        api(MavenPublication) {
+//            groupId group
+//            version project.version
+//
+//           artifact apiJar {
+//                classifier "api"
+//            }
+//        }
+//        src(MavenPublication) {
+//          groupId group
+//          version project.version
+//
+//          artifact jarSource {
+//            classifier "src"
+//          }
+//        }
+//        deobf(MavenPublication) {
+//          groupId group
+//          version project.version
+//
+//          artifact jarDeobf {
+//            classifier 'deobf'
+//          }
+//        }
+//        scalaDoc(MavenPublication) {
+//            groupId group
+//            version project.version
+//
+//            artifact jarApiScalaDoc {
+//                classifier "api-scaladoc"
+//            }
+//        }
+//    }
+//    repositories {
+//        maven {
+//            url "file://${gitPublishConfig.home}/${gitPublishConfig.org}/${gitPublishConfig.repo}/releases"
+//        }
+//    }
 }
 
 

@@ -23,11 +23,12 @@ package com.itszuvalex.itszulib.render
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.inventory.GuiContainer
 import net.minecraft.client.renderer.{ActiveRenderInfo, Tessellator}
-import net.minecraft.util.IIcon
-import net.minecraftforge.common.util.ForgeDirection
-import net.minecraftforge.common.util.ForgeDirection._
+//import net.minecraft.util.IIcon
+//import net.minecraftforge.common.util.ForgeDirection
+//import net.minecraftforge.common.util.ForgeDirection._
 import org.lwjgl.opengl.GL11
-
+//TODO: Oh boy...
+/*
 object RenderUtils {
   //  val MICRO_POWER_PARTICLE = "MicroPower"
   //  val NANO_POWER_PARTICLE  = "NanoPower"
@@ -343,4 +344,4 @@ object RenderUtils {
     drawTexturedModalRectFromIcon(zheight, x + i, y, remaining, height, icon.getMinU, icon.getInterpolatedV((remaining * 16f) / height), icon.getMinV, icon.getMaxV)
   }
 }
-
+//\*/

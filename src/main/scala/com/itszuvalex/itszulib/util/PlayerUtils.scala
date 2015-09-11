@@ -54,7 +54,7 @@ object PlayerUtils {
                           formatting: String): Boolean = sendMessageToPlayer(MinecraftServer
                                                                              .getServer
                                                                              .getConfigurationManager
-                                                                             .func_152612_a(username),
+                                                                             .getPlayerByUsername(username),
                                                                              modID,
                                                                              message,
                                                                              formatting)

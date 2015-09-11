@@ -23,10 +23,12 @@ package com.itszuvalex.itszulib.command;
 
 import com.itszuvalex.itszulib.ItszuLib;
 import com.itszuvalex.itszulib.util.PlayerUtils;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
 import org.apache.logging.log4j.Level;
 
@@ -51,7 +53,7 @@ public abstract class CommandBase implements ICommand {
         return true;
     }
 
-    public String getModName() {return "ItszuCore";}
+    public String getModName() {return "ItszuLib";}
 
     @Override
     public int compareTo(Object o) {
@@ -115,7 +117,7 @@ public abstract class CommandBase implements ICommand {
     }
 
     @Override
-    public void processCommand(ICommandSender icommandsender, String[] astring) {
+    public void processCommand(ICommandSender icommandsender, String[] astring) throws CommandException {
         if (icommandsender.getEntityWorld().isRemote) {
             ItszuLib.logger().log(Level.WARN, "Not processing commands Client-side");
             return;
@@ -136,12 +138,12 @@ public abstract class CommandBase implements ICommand {
     }
 
     @Override
-    public List addTabCompletionOptions(ICommandSender icommandsender, String[] astring) {
+    public List addTabCompletionOptions(ICommandSender icommandsender, String[] astring, BlockPos pos) {
         if (astring.length > 0) {
             ICommand subcommand = getSubCommand(astring[0]);
             if (subcommand != null) {
                 return subcommand.addTabCompletionOptions(icommandsender, Arrays.copyOfRange(astring, 1,
-                        astring.length));
+                        astring.length), pos);
             }
         }
         return new ArrayList(subcmds.keySet());

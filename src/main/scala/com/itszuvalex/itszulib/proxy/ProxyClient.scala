@@ -21,9 +21,9 @@
 package com.itszuvalex.itszulib.proxy
 
 import com.itszuvalex.itszulib.render.{PreviewableRenderHandler, PreviewableRendererRegistry, RenderSimpleMachine, ShaderUtils}
-import com.itszuvalex.itszulib.testing.{PortalTileTest, PreviewableIDs, RenderPortalTest, TestPreviewableRenderer}
-import cpw.mods.fml.client.registry.{ClientRegistry, RenderingRegistry}
+//import com.itszuvalex.itszulib.testing.{PortalTileTest, PreviewableIDs, RenderPortalTest, TestPreviewableRenderer}
 import net.minecraftforge.common.MinecraftForge
+import net.minecraftforge.fml.client.registry.{ClientRegistry, RenderingRegistry}
 
 
 class ProxyClient extends ProxyCommon {
@@ -33,10 +33,12 @@ class ProxyClient extends ProxyCommon {
     MinecraftForge.EVENT_BUS.register(new PreviewableRenderHandler)
 
     // Previewable Rendering Test
+    /* TODO: Broken because registry changed
     PreviewableIDs.testID = PreviewableRendererRegistry.bindRenderer(new TestPreviewableRenderer)
     RenderSimpleMachine.renderID = RenderingRegistry.getNextAvailableRenderId
     RenderingRegistry.registerBlockHandler(RenderSimpleMachine.renderID, new RenderSimpleMachine)
+    //\*/
 
-    ClientRegistry.bindTileEntitySpecialRenderer(classOf[PortalTileTest], new RenderPortalTest)
+//    ClientRegistry.bindTileEntitySpecialRenderer(classOf[PortalTileTest], new RenderPortalTest)
   }
 }

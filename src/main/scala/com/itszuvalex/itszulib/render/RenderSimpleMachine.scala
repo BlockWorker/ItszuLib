@@ -21,16 +21,16 @@
 package com.itszuvalex.itszulib.render
 
 import com.itszuvalex.itszulib.render.RenderSimpleMachine._
-import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler
+//import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler
 import net.minecraft.block.Block
-import net.minecraft.client.renderer.{RenderBlocks, Tessellator}
+//import net.minecraft.client.renderer.{RenderBlocks, Tessellator}
 import net.minecraft.world.IBlockAccess
 import org.lwjgl.opengl.GL11
 
 object RenderSimpleMachine {
   var renderID = 0
 }
-
+/* TODO: ISBRH is gone, m8. All is broken.
 class RenderSimpleMachine extends ISimpleBlockRenderingHandler {
   def renderInventoryBlock(block: Block, metadata: Int, modelID: Int, renderer: RenderBlocks) {
     val metadata = 3
@@ -75,3 +75,4 @@ class RenderSimpleMachine extends ISimpleBlockRenderingHandler {
 
   def getRenderId = renderID
 }
+//\*/

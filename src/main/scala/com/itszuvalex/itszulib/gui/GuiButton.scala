@@ -40,7 +40,7 @@ class GuiButton(override var anchorX: Int,
 
   override def onMouseClick(mouseX: Int, mouseY: Int, button: Int): Boolean = {
     if (isLocationInside(mouseX, mouseY)) {
-      Minecraft.getMinecraft.getSoundHandler.playSound(PositionedSoundRecord.func_147674_a(new ResourceLocation("gui.button.press"), 1.0F))
+      Minecraft.getMinecraft.getSoundHandler.playSound(PositionedSoundRecord.create(new ResourceLocation("gui.button.press"), 1.0F))
       true
     }
     else false
@@ -70,7 +70,7 @@ class GuiButton(override var anchorX: Int,
     else if (isMousedOver)
       Gui.drawRect(screenX, screenY, screenX + panelWidth, screenY + panelWidth, colorHighlight)
 
-    val fr = Minecraft.getMinecraft.fontRenderer
+    val fr = Minecraft.getMinecraft.fontRendererObj
     val lines = fr.listFormattedStringToWidth(text, panelWidth - 2).asInstanceOf[java.util.List[String]]
     var height = 0
     lines.foreach { _ =>

@@ -1,9 +1,10 @@
 package com.itszuvalex.itszulib.core.traits.block
 
 import net.minecraft.block.Block
+import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.item.ItemStack
-import net.minecraft.util.MathHelper
+import net.minecraft.util.{BlockPos, MathHelper}
 import net.minecraft.world.World
 
 /**
@@ -13,21 +14,21 @@ trait RotateOnPlace extends Block {
   /**
    * Called whenever the block is added into the world. Args: world, x, y, z
    */
-  override def onBlockAdded(world: World, x: Int, y: Int, z: Int) {
-    super.onBlockAdded(world, x, y, z)
-    setDefaultDirection(world, x, y, z)
+  override def onBlockAdded(world: World, pos: BlockPos, state: IBlockState) {
+    super.onBlockAdded(world, pos, state)
+    setDefaultDirection(world, pos)
   }
 
 
   /**
    * set a blocks direction
    */
-  private def setDefaultDirection(world: World, x: Int, y: Int, z: Int) {
+  private def setDefaultDirection(world: World, pos: BlockPos) {
     if (!world.isRemote) {
-      val south = world.getBlock(x, y, z - 1)
-      val north = world.getBlock(x, y, z + 1)
-      val west = world.getBlock(x - 1, y, z)
-      val east = world.getBlock(x + 1, y, z)
+      val south = world.getBlockState(pos.offsetSouth()).getBlock
+      val north = world.getBlockState(pos.offsetNorth()).getBlock
+      val west = world.getBlockState(pos.offsetWest()).getBlock
+      val east = world.getBlockState(pos.offsetEast()).getBlock
       var metadata: Byte = 3
       if (south.isOpaqueCube && !north.isOpaqueCube) {
         metadata = 3
@@ -41,27 +42,27 @@ trait RotateOnPlace extends Block {
       if (east.isOpaqueCube && !west.isOpaqueCube) {
         metadata = 4
       }
-      world.setBlockMetadataWithNotify(x, y, z, metadata, 2)
+      world.setBlockState(pos, world.getBlockState(pos).getBlock.getStateFromMeta(metadata), 2)
     }
   }
 
   /**
    * Called when the block is placed in the world.
    */
-  override def onBlockPlacedBy(world: World, x: Int, y: Int, z: Int, entity: EntityLivingBase, itemStack: ItemStack) {
-    super.onBlockPlacedBy(world, x, y, z, entity, itemStack)
+  override def onBlockPlacedBy(world: World, pos: BlockPos, state: IBlockState, entity: EntityLivingBase, itemStack: ItemStack) {
+    super.onBlockPlacedBy(world, pos, state, entity, itemStack)
     val mask = MathHelper.floor_double((entity.rotationYaw * 4.0F / 360.0F).toDouble + 0.5D) & 3
     if (mask == 0) {
-      world.setBlockMetadataWithNotify(x, y, z, 2, 2)
+      world.setBlockState(pos, state.getBlock.getStateFromMeta(2), 2)
     }
     if (mask == 1) {
-      world.setBlockMetadataWithNotify(x, y, z, 5, 2)
+      world.setBlockState(pos, state.getBlock.getStateFromMeta(5), 2)
     }
     if (mask == 2) {
-      world.setBlockMetadataWithNotify(x, y, z, 3, 2)
+      world.setBlockState(pos, state.getBlock.getStateFromMeta(3), 2)
     }
     if (mask == 3) {
-      world.setBlockMetadataWithNotify(x, y, z, 4, 2)
+      world.setBlockState(pos, state.getBlock.getStateFromMeta(4), 2)
     }
   }
 }

@@ -26,12 +26,12 @@ import com.itszuvalex.itszulib.ItszuLib
 import com.itszuvalex.itszulib.api.player.IPlayerProperty
 import com.itszuvalex.itszulib.network.PacketHandler
 import com.itszuvalex.itszulib.network.messages.MessagePlayerProperty
-import cpw.mods.fml.common.FMLCommonHandler
 import net.minecraft.entity.Entity
 import net.minecraft.entity.player.{EntityPlayer, EntityPlayerMP}
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.world.World
 import net.minecraftforge.common.IExtendedEntityProperties
+import net.minecraftforge.fml.common.FMLCommonHandler
 import org.apache.logging.log4j.Level
 
 import scala.collection.JavaConversions._
@@ -60,7 +60,7 @@ class PlayerProperties(protected final var player: EntityPlayer) extends IExtend
     }
     catch {
       case e: InstantiationException =>
-        ItszuLib.logger.log(Level.ERROR, "Failed to create new instance of " + entry.getKey + " on creating PlayerProperties for player: " + player + " name: " + player.getCommandSenderName)
+        ItszuLib.logger.log(Level.ERROR, "Failed to create new instance of " + entry.getKey + " on creating PlayerProperties for player: " + player + " name: " + player.getDisplayNameString)
         e.printStackTrace()
       case e: IllegalAccessException =>
         e.printStackTrace()
@@ -80,14 +80,14 @@ class PlayerProperties(protected final var player: EntityPlayer) extends IExtend
     for (entry <- properties.entrySet) {
       savePropertyToCompound(entry.getKey, compound)
     }
-    PacketHandler.INSTANCE.sendTo(new MessagePlayerProperty(player.getCommandSenderName, compound), player.asInstanceOf[EntityPlayerMP])
+    PacketHandler.INSTANCE.sendTo(new MessagePlayerProperty(player.getDisplayNameString, compound), player.asInstanceOf[EntityPlayerMP])
   }
 
   def sync(property: String) {
     if (FMLCommonHandler.instance.getEffectiveSide.isClient) return
     val packetCompound = new NBTTagCompound
     savePropertyToCompound(property, packetCompound)
-    PacketHandler.INSTANCE.sendTo(new MessagePlayerProperty(player.getCommandSenderName, packetCompound), player.asInstanceOf[EntityPlayerMP])
+    PacketHandler.INSTANCE.sendTo(new MessagePlayerProperty(player.getDisplayNameString, packetCompound), player.asInstanceOf[EntityPlayerMP])
   }
 
   private def savePropertyToCompound(property: String, packetCompound: NBTTagCompound) {

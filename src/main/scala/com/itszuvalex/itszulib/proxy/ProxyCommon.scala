@@ -21,7 +21,7 @@
 package com.itszuvalex.itszulib.proxy
 
 import com.itszuvalex.itszulib.testing.{PortalTileTest, TileLocTrackerTest}
-import cpw.mods.fml.common.registry.GameRegistry
+import net.minecraftforge.fml.common.registry.GameRegistry
 
 class ProxyCommon {
   def init(): Unit = {

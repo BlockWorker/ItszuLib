@@ -22,9 +22,9 @@ package com.itszuvalex.itszulib.api.core
 
 import net.minecraft.nbt.NBTTagCompound
 import net.minecraft.tileentity.TileEntity
+import net.minecraft.util.{EnumFacing, BlockPos}
 import net.minecraft.world.chunk.Chunk
 import net.minecraftforge.common.DimensionManager
-import net.minecraftforge.common.util.ForgeDirection
 
 /**
  * Created by Christopher Harris (Itszuvalex) on 5/9/14.
@@ -33,18 +33,24 @@ object Loc4 {
   def apply(compound: NBTTagCompound): Loc4 = {
     if (compound == null) null
     else {
-      val loc = new Loc4(0, 0, 0, 0)
+      val loc = new Loc4(new BlockPos(0, 0, 0), 0)
       loc.loadFromNBT(compound)
       loc
     }
   }
 }
 
-case class Loc4(var x: Int, var y: Int, var z: Int, var dim: Int) extends NBTSerializable with Comparable[Loc4] {
+case class Loc4(var bp: BlockPos, var dim: Int) extends NBTSerializable with Comparable[Loc4] {
 
-  def this() = this(0, 0, 0, 0)
+  def this() = this(new BlockPos(0, 0, 0), 0)
 
-  def this(te: TileEntity) = this(te.xCoord, te.yCoord, te.zCoord, te.getWorldObj.provider.dimensionId)
+  def this(te: TileEntity) = this(te.getPos, te.getWorld.provider.getDimensionId)
+
+  def x = bp.getX
+
+  def y = bp.getY
+
+  def z = bp.getZ
 
   def saveToNBT(compound: NBTTagCompound) {
     compound.setInteger("x", x)
@@ -54,33 +60,39 @@ case class Loc4(var x: Int, var y: Int, var z: Int, var dim: Int) extends NBTSer
   }
 
   def loadFromNBT(compound: NBTTagCompound) {
-    x = compound.getInteger("x")
-    y = compound.getInteger("y")
-    z = compound.getInteger("z")
+    val x_ = compound.getInteger("x")
+    val y_ = compound.getInteger("y")
+    val z_ = compound.getInteger("z")
+    bp = new BlockPos(x_, y_, z_)
     dim = compound.getInteger("dim")
   }
 
   def getWorld = Option(DimensionManager.getWorld(dim))
 
   def getTileEntity(force: Boolean = false) = getWorld match {
-    case Some(a) => Option(if (a.blockExists(x, y, z) || force) a.getTileEntity(x, y, z) else null)
+    case Some(a) => Option(if (!a.isAirBlock(bp) || force) a.getTileEntity(bp) else null)
     case None    => None
   }
 
-  def getBlock(force: Boolean = false) = getWorld match {
-    case Some(a) => Option(if (a.blockExists(x, y, z) || force) a.getBlock(x, y, z) else null)
+  def getBlockState(force: Boolean = false) = getWorld match {
+    case Some(a) => Option(if (!a.isAirBlock(bp) || force) a.getBlockState(bp) else null)
+    case None    => None
+  }
+
+  def getBlock(force: Boolean) = getWorld match {
+    case Some(a) => Option(getBlockState(force).get.getBlock)
     case None    => None
   }
 
   def getChunk(force: Boolean = false) = getWorld match {
-    case Some(a) => Option(if (a.blockExists(x, y, z) || force) a.getChunkFromBlockCoords(x, z) else null)
+    case Some(a) => Option(if (!a.isAirBlock(bp) || force) a.getChunkFromBlockCoords(bp) else null)
     case None    => None
   }
 
   def chunkCoords = (x >> 4, z >> 4)
 
   def chunkContains(chunk: Chunk): Boolean = {
-    if (chunk.worldObj.provider.dimensionId != dim) false
+    if (chunk.getWorld.provider.getDimensionId != dim) false
     else if (x <= chunk.xPosition * 16) false
     else if (x > chunk.xPosition * 16 + 16) false
     else if (z <= chunk.zPosition * 16) false
@@ -96,12 +108,12 @@ case class Loc4(var x: Int, var y: Int, var z: Int, var dim: Int) extends NBTSer
     else false
   }
 
-  def getOffset(dir: ForgeDirection, distance: Int = 1): Loc4 = getOffset(distance * dir.offsetX,
-                                                                          distance * dir.offsetY,
-                                                                          distance * dir.offsetZ)
+  def getOffset(dir: EnumFacing, distance: Int = 1): Loc4 = getOffset(distance * dir.getDirectionVec.getX,
+                                                                      distance * dir.getDirectionVec.getY,
+                                                                      distance * dir.getDirectionVec.getZ)
 
 
-  def getOffset(xOffset: Int, yOffset: Int, zOffset: Int): Loc4 = new Loc4(x + xOffset, y + yOffset, z + zOffset, dim)
+  def getOffset(xOffset: Int, yOffset: Int, zOffset: Int): Loc4 = new Loc4(new BlockPos(x + xOffset, y + yOffset, z + zOffset), dim)
 
   def distSqr(other: Loc4): Double = {
     if (other.dim != dim) return Float.MaxValue

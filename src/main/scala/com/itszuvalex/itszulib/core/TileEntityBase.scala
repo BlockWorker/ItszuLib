@@ -25,9 +25,11 @@ import com.itszuvalex.itszulib.util.DataUtils
 import com.itszuvalex.itszulib.core.traits.tile.TileDescriptionPacket
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.server.gui.IUpdatePlayerListBox
 import net.minecraft.tileentity.TileEntity
+import net.minecraft.util.EnumFacing
 
-abstract class TileEntityBase extends TileEntity with TileDescriptionPacket {
+abstract class TileEntityBase extends TileEntity with TileDescriptionPacket with IUpdatePlayerListBox {
   override def readFromNBT(par1nbtTagCompound: NBTTagCompound) {
     super.readFromNBT(par1nbtTagCompound)
     DataUtils.loadObjectFromNBT(par1nbtTagCompound, this, DataUtils.EnumSaveType.WORLD)
@@ -38,8 +40,8 @@ abstract class TileEntityBase extends TileEntity with TileDescriptionPacket {
     DataUtils.saveObjectToNBT(par1nbtTagCompound, this, DataUtils.EnumSaveType.WORLD)
   }
 
-  override def updateEntity() {
-    super.updateEntity()
+  override def update() {
+    super.update()
     if (!worldObj.isRemote) serverUpdate()
     else clientUpdate()
   }
@@ -72,9 +74,9 @@ abstract class TileEntityBase extends TileEntity with TileDescriptionPacket {
     DataUtils.saveObjectToNBT(compound, this, DataUtils.EnumSaveType.ITEM)
   }
 
-  def onSideActivate(par5EntityPlayer: EntityPlayer, side: Int): Boolean = {
+  def onSideActivate(par5EntityPlayer: EntityPlayer, side: EnumFacing): Boolean = {
     if (hasGUI) {
-      par5EntityPlayer.openGui(getMod, getGuiID, worldObj, xCoord, yCoord, zCoord)
+      par5EntityPlayer.openGui(getMod, getGuiID, worldObj, getPos.getX, getPos.getY, getPos.getZ)
       return true
     }
     false
@@ -91,15 +93,15 @@ abstract class TileEntityBase extends TileEntity with TileDescriptionPacket {
 
   def canPlayerUse(player: EntityPlayer) = true
 
-  @Deprecated def onInventoryChanged() = setModified()
+  //@Deprecated def onInventoryChanged() = setModified()
 
-  def setModified() = if (worldObj != null) worldObj.markTileEntityChunkModified(xCoord, yCoord, zCoord, this)
+  //def setModified() = if (worldObj != null) worldObj.markTileEntityChunkModified(xCoord, yCoord, zCoord, this)
 
-  def setRenderUpdate() = if (worldObj != null) worldObj.markBlockRangeForRenderUpdate(xCoord, yCoord, zCoord, xCoord, yCoord, zCoord)
+  def setRenderUpdate() = if (worldObj != null) worldObj.markBlockRangeForRenderUpdate(getPos, getPos)
 
-  def setUpdate() = if (worldObj != null) worldObj.markBlockForUpdate(xCoord, yCoord, zCoord)
+  def setUpdate() = if (worldObj != null) worldObj.markBlockForUpdate(getPos)
 
-  def notifyNeighborsOfChange() = if (worldObj != null) worldObj.func_147453_f(xCoord, yCoord, zCoord, getBlockType)
+  def notifyNeighborsOfChange() = if (worldObj != null) worldObj.notifyNeighborsOfStateChange(getPos, getBlockType)
 
 
 }

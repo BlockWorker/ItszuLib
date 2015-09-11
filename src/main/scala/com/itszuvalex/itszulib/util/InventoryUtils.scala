@@ -7,6 +7,7 @@ import com.itszuvalex.itszulib.implicits.IDImplicits._
 import net.minecraft.entity.item.EntityItem
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.util.BlockPos
 import net.minecraft.world.World
 import net.minecraftforge.oredict.OreDictionary
 
@@ -64,12 +65,10 @@ object InventoryUtils {
    *
    * @param item
    * @param world
-   * @param x
-   * @param y
-   * @param z
+   * @param pos
    * @param rand
    */
-  def dropItem(item: ItemStack, world: World, x: Int, y: Int, z: Int, rand: Random): Unit = {
+  def dropItem(item: ItemStack, world: World, pos: BlockPos, rand: Random): Unit = {
     if (item == null) return
 
     val f = rand.nextFloat * 0.8F + 0.1F
@@ -82,9 +81,9 @@ object InventoryUtils {
       }
       item.stackSize -= k1
       val entityitem = new EntityItem(world,
-                                      (x.toFloat + f).toDouble,
-                                      (y.toFloat + f1).toDouble,
-                                      (z.toFloat + f2).toDouble,
+                                      (pos.getX.toFloat + f).toDouble,
+                                      (pos.getY.toFloat + f1).toDouble,
+                                      (pos.getZ.toFloat + f2).toDouble,
                                       new ItemStack(item.getItem, k1, item.getItemDamage))
       if (item.hasTagCompound) {
         entityitem.getEntityItem.setTagCompound(item.getTagCompound.copy.asInstanceOf[NBTTagCompound])

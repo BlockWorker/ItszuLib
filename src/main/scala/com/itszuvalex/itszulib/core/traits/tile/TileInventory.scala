@@ -5,6 +5,7 @@ import com.itszuvalex.itszulib.core.{BaseInventory, TileEntityBase}
 import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.inventory.ISidedInventory
 import net.minecraft.item.ItemStack
+import net.minecraft.util.EnumFacing
 
 /**
  * Created by Chris on 11/29/2014.
@@ -15,13 +16,13 @@ trait TileInventory extends TileEntityBase with ISidedInventory {
 
   def defaultInventory: BaseInventory
 
-  override def getAccessibleSlotsFromSide(side: Int) = (0 until inventory.getSizeInventory).toArray
+  override def getSlotsForFace(side: EnumFacing) = (0 until inventory.getSizeInventory).toArray
 
-  override def canExtractItem(slot: Int, item: ItemStack, side: Int) = true
+  override def canExtractItem(slot: Int, item: ItemStack, side: EnumFacing) = true
 
-  override def canInsertItem(slot: Int, item: ItemStack, side: Int) = true
+  override def canInsertItem(slot: Int, item: ItemStack, side: EnumFacing) = true
 
-  override def closeInventory() = inventory.closeInventory()
+  override def closeInventory(player: EntityPlayer) = inventory.closeInventory(player)
 
   override def decrStackSize(slot: Int, amount: Int) = {
     val ret = inventory.decrStackSize(slot, amount)
@@ -37,7 +38,7 @@ trait TileInventory extends TileEntityBase with ISidedInventory {
 
   override def getStackInSlotOnClosing(slot: Int): ItemStack = inventory.getStackInSlotOnClosing(slot)
 
-  override def openInventory() = inventory.openInventory()
+  override def openInventory(player: EntityPlayer) = inventory.openInventory(player)
 
   override def setInventorySlotContents(slot: Int, item: ItemStack) = {
     inventory.setInventorySlotContents(slot, item)
@@ -53,7 +54,7 @@ trait TileInventory extends TileEntityBase with ISidedInventory {
 
   override def getStackInSlot(slot: Int) = inventory.getStackInSlot(slot)
 
-  override def hasCustomInventoryName = inventory.hasCustomInventoryName
+  override def hasCustomName = inventory.hasCustomName
 
-  override def getInventoryName = inventory.getInventoryName
+  override def getName = inventory.getName
 }

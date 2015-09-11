@@ -1,13 +1,13 @@
 package com.itszuvalex.itszulib.network.messages
 
-import java.io.{ByteArrayInputStream, IOException}
+import java.io.{ByteArrayOutputStream, OutputStream, ByteArrayInputStream, IOException}
 
 import com.itszuvalex.itszulib.ItszuLib
-import com.itszuvalex.itszulib.util.PlayerUtils
 import com.itszuvalex.itszulib.player.PlayerProperties
-import cpw.mods.fml.common.network.simpleimpl.{IMessage, IMessageHandler, MessageContext}
+import com.itszuvalex.itszulib.util.PlayerUtils
 import io.netty.buffer.ByteBuf
 import net.minecraft.nbt.{CompressedStreamTools, NBTTagCompound}
+import net.minecraftforge.fml.common.network.simpleimpl.{MessageContext, IMessageHandler, IMessage}
 import org.apache.logging.log4j.Level
 
 /**
@@ -36,8 +36,10 @@ class MessagePlayerProperty(private var username: String, private var data: NBTT
 
   override def toBytes(buf: ByteBuf): Unit = {
     var bytes: Array[Byte] = null
+    val stream = new ByteArrayOutputStream()
     try {
-      bytes = CompressedStreamTools.compress(data)
+      CompressedStreamTools.writeCompressed(data, stream)
+      bytes = stream.toByteArray
     }
     catch {
       case e: IOException =>

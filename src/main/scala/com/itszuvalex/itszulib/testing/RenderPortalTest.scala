@@ -1,6 +1,6 @@
 package com.itszuvalex.itszulib.testing
 
-import com.itszuvalex.itszulib.render.{RenderUtils, ShaderUtils}
+//import com.itszuvalex.itszulib.render.{RenderUtils, ShaderUtils}
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer
@@ -16,7 +16,7 @@ object RenderPortalTest {
   private val skyLocation    : ResourceLocation = new ResourceLocation("textures/environment/end_sky.png")
   private val pictureLocation: ResourceLocation = new ResourceLocation("textures/entity/end_portal.png")
 }
-
+/*TODO: Oh boy...
 class RenderPortalTest extends TileEntitySpecialRenderer {
   override def renderTileEntityAt(p_147500_1_ : TileEntity, x: Double, y: Double, z: Double, p_147500_8_ : Float): Unit = {
     //    renderBackground(x, y, z)
@@ -92,3 +92,4 @@ class RenderPortalTest extends TileEntitySpecialRenderer {
     tes.draw()
   }
 }
+//\*/

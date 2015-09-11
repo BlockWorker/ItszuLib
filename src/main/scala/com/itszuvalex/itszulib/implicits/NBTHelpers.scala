@@ -89,7 +89,7 @@ object NBTHelpers {
           case n: NBTTagCompound =>
             if (compound.hasKey(key)) {
               val nc = compound.getCompoundTag(key)
-              nc.merge(n.func_150296_c().collect { case key: String => (key, n.getTag(key)) }.toSeq: _*)
+              nc.merge(n.getKeySet.collect { case key: String => (key, n.getTag(key)) }.toSeq: _*)
             }
             else {
               compound.setTag(key, n)

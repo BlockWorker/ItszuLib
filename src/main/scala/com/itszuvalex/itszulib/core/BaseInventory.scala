@@ -29,6 +29,7 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.inventory.{Container, IInventory}
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
+import net.minecraft.util.IChatComponent
 
 /**
  *
@@ -73,9 +74,9 @@ class BaseInventory(size: Int) extends IInventory with NBTSerializable {
     inventory(i) = itemstack
   }
 
-  override def getInventoryName = "femto.BaseInventory.ImLazyAndDidntCodeThis"
+  override def getName = "femto.BaseInventory.ImLazyAndDidntCodeThis"
 
-  override def hasCustomInventoryName = false
+  override def hasCustomName = false
 
   override def getInventoryStackLimit = 64
 
@@ -84,10 +85,10 @@ class BaseInventory(size: Int) extends IInventory with NBTSerializable {
 
   override def isUseableByPlayer(entityplayer: EntityPlayer) = true
 
-  override def openInventory() {
+  override def openInventory(player: EntityPlayer) {
   }
 
-  override def closeInventory() {
+  override def closeInventory(player: EntityPlayer) {
   }
 
   override def isItemValidForSlot(i: Int, itemstack: ItemStack): Boolean = true
@@ -107,4 +108,14 @@ class BaseInventory(size: Int) extends IInventory with NBTSerializable {
   def setInventorySize(size: Int) = inventory = util.Arrays.copyOfRange(inventory, 0, size)
 
   def getComparatorInputOverride = Container.calcRedstoneFromInventory(this)
+
+  override def clear(): Unit = super.clear()
+
+  override def getFieldCount: Int = super.getFieldCount
+
+  override def getField(id: Int): Int = super.getField(id)
+
+  override def setField(id: Int, value: Int): Unit = super.setField(id, value)
+
+  override def getDisplayName: IChatComponent = super.getDisplayName
 }

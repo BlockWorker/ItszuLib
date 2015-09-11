@@ -2,13 +2,12 @@ package com.itszuvalex.itszulib.core.traits.block
 
 import com.itszuvalex.itszulib.core.traits.block.MultiSided._
 import net.minecraft.block.Block
-import net.minecraft.client.renderer.texture.IIconRegister
+import net.minecraft.block.state.IBlockState
 import net.minecraft.entity.EntityLivingBase
 import net.minecraft.item.ItemStack
-import net.minecraft.util.{IIcon, MathHelper}
+import net.minecraft.util.{BlockPos, MathHelper, EnumFacing}
+import net.minecraft.util.EnumFacing._
 import net.minecraft.world.World
-import net.minecraftforge.common.util.ForgeDirection
-import net.minecraftforge.common.util.ForgeDirection._
 
 /**
  * Created by Chris on 12/6/2014.
@@ -17,9 +16,10 @@ object MultiSided {
   //TODO : THIS DOES NOT WORK
   //     METADATA IS ONLY 16 POSSIBLE VALUES
   //    THIS REQURIES 24.  YOU WILL NEED TO GO TO TILE ENTITIES TO DO THIS.
-  def getTopAndFrontFromMetadata(metadata: Byte): (ForgeDirection, ForgeDirection) = {
-    val top = getOrientation(metadata / 4)
-    var front = UNKNOWN
+  
+  def getTopAndFrontFromMetadata(metadata: Byte): (EnumFacing, EnumFacing) = {
+    val top = values()(metadata / 4)
+    var front = DOWN
     (top, metadata % 4) match {
       //*****************************
       case (UP, 0) => front = NORTH
@@ -57,7 +57,7 @@ object MultiSided {
     (top, front)
   }
 
-  def getMetadataFromTopAndFront(top: ForgeDirection, front: ForgeDirection): Byte = {
+  def getMetadataFromTopAndFront(top: EnumFacing, front: EnumFacing): Byte = {
     val ret: Byte = (top.ordinal * 4).toByte
     var s: Byte = 0
     (top, front) match {
@@ -96,10 +96,8 @@ object MultiSided {
     }
     (ret + s).toByte
   }
-
-  def getRotatedSide(orig: ForgeDirection, top: ForgeDirection, front: ForgeDirection): ForgeDirection = {
-    if (orig == UNKNOWN) return UNKNOWN
-
+  
+  def getRotatedSide(orig: EnumFacing, top: EnumFacing, front: EnumFacing): EnumFacing = {
     (top, front) match {
       case (NORTH, dir) =>
         dir match {
@@ -111,7 +109,7 @@ object MultiSided {
               case EAST => WEST
               case SOUTH => DOWN
               case WEST => EAST
-              case _ => UNKNOWN
+              case _ => DOWN
             }
           case EAST =>
             orig match {
@@ -121,7 +119,7 @@ object MultiSided {
               case EAST => NORTH
               case SOUTH => DOWN
               case WEST => SOUTH
-              case _ => UNKNOWN
+              case _ => DOWN
             }
           case DOWN =>
             orig match {
@@ -131,7 +129,7 @@ object MultiSided {
               case EAST => EAST
               case SOUTH => DOWN
               case WEST => WEST
-              case _ => UNKNOWN
+              case _ => DOWN
             }
           case WEST =>
             orig match {
@@ -141,9 +139,9 @@ object MultiSided {
               case EAST => SOUTH
               case SOUTH => DOWN
               case WEST => NORTH
-              case _ => UNKNOWN
+              case _ => DOWN
             }
-          case _ => UNKNOWN
+          case _ => DOWN
         }
       case (UP, dir) =>
         dir match {
@@ -156,7 +154,7 @@ object MultiSided {
               case EAST => NORTH
               case SOUTH => EAST
               case WEST => SOUTH
-              case _ => UNKNOWN
+              case _ => DOWN
             }
           case SOUTH => orig.getOpposite
           case WEST =>
@@ -167,9 +165,9 @@ object MultiSided {
               case EAST => SOUTH
               case SOUTH => WEST
               case WEST => NORTH
-              case _ => UNKNOWN
+              case _ => DOWN
             }
-          case _ => UNKNOWN
+          case _ => DOWN
         }
       case (EAST, dir) =>
         dir match {
@@ -181,7 +179,7 @@ object MultiSided {
               case EAST => UP
               case SOUTH => WEST
               case WEST => DOWN
-              case _ => UNKNOWN
+              case _ => DOWN
             }
           case SOUTH =>
             orig match {
@@ -191,7 +189,7 @@ object MultiSided {
               case EAST => UP
               case SOUTH => NORTH
               case WEST => DOWN
-              case _ => UNKNOWN
+              case _ => DOWN
             }
           case DOWN =>
             orig match {
@@ -201,7 +199,7 @@ object MultiSided {
               case EAST => UP
               case SOUTH => EAST
               case WEST => DOWN
-              case _ => UNKNOWN
+              case _ => DOWN
             }
           case NORTH =>
             orig match {
@@ -211,30 +209,28 @@ object MultiSided {
               case EAST => UP
               case SOUTH => SOUTH
               case WEST => DOWN
-              case _ => UNKNOWN
+              case _ => DOWN
             }
-          case _ => UNKNOWN
+          case _ => DOWN
         }
       //*****************************
-      case (UNKNOWN, _) => UNKNOWN
-      case (_, UNKNOWN) => UNKNOWN
       case (t, dir) => getRotatedSide(orig.getOpposite, t.getOpposite, dir.getOpposite)
-      case _ => UNKNOWN
+      case _ => DOWN
     }
   }
 }
 
 trait MultiSided extends Block {
-  val icons = new Array[IIcon](6)
+  //val icons = new Array[IIcon](6)
 
   /**
    * Called whenever the block is added into the world. Args: world, x, y, z
    */
-  override def onBlockAdded(world: World, x: Int, y: Int, z: Int) {
-    super.onBlockAdded(world, x, y, z)
-    setDefaultDirection(world, x, y, z)
+  override def onBlockAdded(world: World, pos: BlockPos, state: IBlockState) {
+    super.onBlockAdded(world, pos, state)
+    setDefaultDirection(world, pos)
   }
-
+  /* start toggleable comment block
   override def getIcon(side: Int, metadata: Int): IIcon = {
     val (top, front) = getTopAndFrontFromMetadata(metadata.toByte)
     getRotatedSide(ForgeDirection.getOrientation(side), top, front) match {
@@ -255,20 +251,21 @@ trait MultiSided extends Block {
     icons(UP.ordinal()) = register.registerIcon(getTextureNameForSide(UP))
     icons(DOWN.ordinal()) = register.registerIcon(getTextureNameForSide(DOWN))
   }
+  // end toggleable comment block */
 
-  def getTextureNameForSide(side: ForgeDirection): String
+  def getTextureNameForSide(side: EnumFacing): String
 
   /**
    * set a blocks direction
    */
-  private def setDefaultDirection(world: World, x: Int, y: Int, z: Int) {
+  private def setDefaultDirection(world: World, pos: BlockPos) {
     if (!world.isRemote) {
-      val south = world.getBlock(x, y, z - 1)
-      val north = world.getBlock(x, y, z + 1)
-      val west = world.getBlock(x - 1, y, z)
-      val east = world.getBlock(x + 1, y, z)
+      val south = world.getBlockState(pos.offsetSouth()).getBlock
+      val north = world.getBlockState(pos.offsetNorth()).getBlock
+      val west = world.getBlockState(pos.offsetWest()).getBlock
+      val east = world.getBlockState(pos.offsetEast()).getBlock
       val top = UP
-      var front = UNKNOWN
+      var front = NORTH
       if (south.isOpaqueCube && !north.isOpaqueCube) {
         front = NORTH
       }
@@ -281,27 +278,27 @@ trait MultiSided extends Block {
       if (east.isOpaqueCube && !west.isOpaqueCube) {
         front = WEST
       }
-      world.setBlockMetadataWithNotify(x, y, z, getMetadataFromTopAndFront(top, front), 2)
+      world.setBlockState(pos, world.getBlockState(pos).getBlock.getStateFromMeta(getMetadataFromTopAndFront(top, front)), 2)
     }
   }
 
   /**
    * Called when the block is placed in the world.
    */
-  override def onBlockPlacedBy(world: World, x: Int, y: Int, z: Int, entity: EntityLivingBase, itemStack: ItemStack) {
-    super.onBlockPlacedBy(world, x, y, z, entity, itemStack)
+  override def onBlockPlacedBy(world: World, pos: BlockPos, state: IBlockState, entity: EntityLivingBase, itemStack: ItemStack) {
+    super.onBlockPlacedBy(world, pos, state, entity, itemStack)
     val mask = MathHelper.floor_double((entity.rotationYaw * 4.0F / 360.0F).toDouble + 0.5D) & 3
     if (mask == 0) {
-      world.setBlockMetadataWithNotify(x, y, z, getMetadataFromTopAndFront(UP, SOUTH), 2) // SOUTH
+      world.setBlockState(pos, world.getBlockState(pos).getBlock.getStateFromMeta(getMetadataFromTopAndFront(UP, SOUTH)), 2) // SOUTH
     }
     if (mask == 1) {
-      world.setBlockMetadataWithNotify(x, y, z, getMetadataFromTopAndFront(UP, EAST), 2) // EAST
+      world.setBlockState(pos, world.getBlockState(pos).getBlock.getStateFromMeta(getMetadataFromTopAndFront(UP, EAST)), 2) // EAST
     }
     if (mask == 2) {
-      world.setBlockMetadataWithNotify(x, y, z, getMetadataFromTopAndFront(UP, NORTH), 2) // NORTH
+      world.setBlockState(pos, world.getBlockState(pos).getBlock.getStateFromMeta(getMetadataFromTopAndFront(UP, NORTH)), 2) // NORTH
     }
     if (mask == 3) {
-      world.setBlockMetadataWithNotify(x, y, z, getMetadataFromTopAndFront(NORTH, WEST), 2) // WEST
+      world.setBlockState(pos, world.getBlockState(pos).getBlock.getStateFromMeta(getMetadataFromTopAndFront(NORTH, WEST)), 2) // WEST
     }
   }
 }
