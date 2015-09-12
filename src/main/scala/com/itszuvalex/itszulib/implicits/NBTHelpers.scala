@@ -82,7 +82,7 @@ object NBTHelpers {
                       }
         compound
       }
-
+      /*TODO: What?
       def merge(elems: (String, Any)*): NBTTagCompound = {
         elems.foreach { case (key, value) => value match {
           case null              =>
@@ -99,8 +99,8 @@ object NBTHelpers {
                       }
         compound
       }
+      //\*/
     }
-
 
     implicit class NBTCompoundReading(compound: NBTTagCompound) {
 

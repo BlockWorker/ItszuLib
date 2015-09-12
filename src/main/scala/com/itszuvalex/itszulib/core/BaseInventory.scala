@@ -29,7 +29,7 @@ import net.minecraft.entity.player.EntityPlayer
 import net.minecraft.inventory.{Container, IInventory}
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
-import net.minecraft.util.IChatComponent
+import net.minecraft.util.{ChatComponentText, IChatComponent}
 
 /**
  *
@@ -109,13 +109,17 @@ class BaseInventory(size: Int) extends IInventory with NBTSerializable {
 
   def getComparatorInputOverride = Container.calcRedstoneFromInventory(this)
 
-  override def clear(): Unit = super.clear()
+  override def clear(): Unit = {
+    for (i <- 0 until inventory.length) {
+      inventory(i) = null
+    }
+  }
 
-  override def getFieldCount: Int = super.getFieldCount
+  override def getFieldCount: Int = 0
 
-  override def getField(id: Int): Int = super.getField(id)
+  override def getField(id: Int): Int = 0
 
-  override def setField(id: Int, value: Int): Unit = super.setField(id, value)
+  override def setField(id: Int, value: Int): Unit = {}
 
-  override def getDisplayName: IChatComponent = super.getDisplayName
+  override def getDisplayName: IChatComponent = new ChatComponentText(getName)
 }

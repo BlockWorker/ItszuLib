@@ -41,10 +41,11 @@ abstract class TileEntityBase extends TileEntity with TileDescriptionPacket with
   }
 
   override def update() {
-    super.update()
     if (!worldObj.isRemote) serverUpdate()
     else clientUpdate()
   }
+
+  def world = worldObj
 
 
   /**

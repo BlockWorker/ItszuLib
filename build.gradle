@@ -50,8 +50,8 @@ if (System.getenv().CIRCLE_BRANCH != null && !System.getenv().CIRCLE_BRANCH.equa
 }
 
 compileScala {
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+    sourceCompatibility = 1.7
+    targetCompatibility = 1.7
 }
 
 group = "com.itszuvalex.itszulib" // http://maven.apache.org/guides/mini/guide-naming-conventions.html

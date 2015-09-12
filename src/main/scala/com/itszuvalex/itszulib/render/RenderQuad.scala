@@ -22,12 +22,12 @@ package com.itszuvalex.itszulib.render
 
 import net.minecraft.client.renderer.Tessellator
 //import net.minecraft.util.IIcon
-//TODO: VERY BROKEN
+/*TODO: VERY BROKEN
 class RenderQuad(var a: Point3D,
                  var b: Point3D,
                  var c: Point3D,
                  var d: Point3D,
-                 //var icon: IIcon,
+                 var icon: IIcon,
                  var minU: Float,
                  var maxU: Float,
                  var minV: Float,
@@ -36,8 +36,8 @@ class RenderQuad(var a: Point3D,
   def this(a: Point3D, b: Point3D, c: Point3D, d: Point3D /*icon: IIcon*/) =
     this(a, b, c, d /*icon, icon.getMinU, icon.getMaxU, icon.getMinV, icon.getMaxV*/)
 
-  //private def this(a: Point3D, b: Point3D, c: Point3D, d: Point3D) =
-  //  this(a, b, c, d /*null*/)
+  private def this(a: Point3D, b: Point3D, c: Point3D, d: Point3D) =
+    this(a, b, c, d /*null*/)
 
 
   def reverse = {
@@ -122,7 +122,6 @@ class RenderQuad(var a: Point3D,
     this
   }
 
-  /*
   def draw() {
     val tes = Tessellator.instance
     val normal = getNormal
@@ -132,7 +131,7 @@ class RenderQuad(var a: Point3D,
     tes.addVertexWithUV(c.x, c.y, c.z, maxU, minV)
     tes.addVertexWithUV(d.x, d.y, d.z, maxU, maxV)
   }
-  //\*/
 
   def getNormal = new Vector3(c, b).cross(new Vector3(a, b)).normalize()
 }
+//\*/

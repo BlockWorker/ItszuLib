@@ -17,8 +17,8 @@ trait MultiBlockComponent extends TileEntityBase with IMultiBlockComponent {
 
   def formMultiBlock(world: World, pos: BlockPos): Boolean = {
     val result = info.formMultiBlock(world, pos)
-    worldObj.markBlockForUpdate(getPos)
-    worldObj.notifyNeighborsOfStateChange(getPos, worldObj.getBlockState(getPos).getBlock)
+    world.markBlockForUpdate(getPos)
+    world.notifyNeighborsOfStateChange(getPos, world.getBlockState(getPos).getBlock)
     result
   }
 
@@ -29,8 +29,8 @@ trait MultiBlockComponent extends TileEntityBase with IMultiBlockComponent {
 
   def breakMultiBlock(world: World, pos: BlockPos): Boolean = {
     val result = info.breakMultiBlock(world, pos)
-    worldObj.markBlockForUpdate(getPos)
-    worldObj.notifyNeighborsOfStateChange(getPos, worldObj.getBlockState(getPos).getBlock)
+    world.markBlockForUpdate(getPos)
+    world.notifyNeighborsOfStateChange(getPos, world.getBlockState(getPos).getBlock)
     result
   }
 
@@ -38,7 +38,7 @@ trait MultiBlockComponent extends TileEntityBase with IMultiBlockComponent {
 
   def forwardToDifferentController[B, T](f: T => B): B = {
     if (isValidMultiBlock)
-      Loc4(info.getControllerPos, worldObj.provider.getDimensionId).getTileEntity(true) match {
+      Loc4(info.getControllerPos, world.provider.getDimensionId).getTileEntity(true) match {
         case Some(a) if a.isInstanceOf[T] => return f(a.asInstanceOf[T])
         case _                            =>
       }
@@ -47,7 +47,7 @@ trait MultiBlockComponent extends TileEntityBase with IMultiBlockComponent {
 
   def forwardToController[B](f: this.type => B): B = {
     if (isValidMultiBlock)
-      Loc4(info.getControllerPos, worldObj.provider.getDimensionId).getTileEntity(true) match {
+      Loc4(info.getControllerPos, world.provider.getDimensionId).getTileEntity(true) match {
         case Some(a) if a.isInstanceOf[this.type] => return f(a.asInstanceOf[this.type])
         case _                                    =>
       }
