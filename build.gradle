@@ -197,52 +197,52 @@ gitPublishConfig {
 
 publishing {
 
-//    publications {
-//
-//        mod(MavenPublication) {
-//            groupId group
-//            version project.version
-//
-//            artifact jar.outputs.files.iterator().next()
-//        }
-//        api(MavenPublication) {
-//            groupId group
-//            version project.version
-//
-//           artifact apiJar {
-//                classifier "api"
-//            }
-//        }
-//        src(MavenPublication) {
-//          groupId group
-//          version project.version
-//
-//          artifact jarSource {
-//            classifier "src"
-//          }
-//        }
-//        deobf(MavenPublication) {
-//          groupId group
-//          version project.version
-//
-//          artifact jarDeobf {
-//            classifier 'deobf'
-//          }
-//        }
-//        scalaDoc(MavenPublication) {
-//            groupId group
-//            version project.version
-//
-//            artifact jarApiScalaDoc {
-//                classifier "api-scaladoc"
-//            }
-//        }
-//    }
-//    repositories {
-//        maven {
-//            url "file://${gitPublishConfig.home}/${gitPublishConfig.org}/${gitPublishConfig.repo}/releases"
-//        }
-//    }
+    publications {
+
+        mod(MavenPublication) {
+            groupId group
+            version project.version
+
+            artifact jar.outputs.files.iterator().next()
+        }
+        api(MavenPublication) {
+            groupId group
+            version project.version
+
+            artifact apiJar {
+                classifier "api"
+            }
+        }
+        src(MavenPublication) {
+          groupId group
+          version project.version
+
+          artifact jarSource {
+            classifier "src"
+          }
+        }
+        deobf(MavenPublication) {
+          groupId group
+          version project.version
+
+          artifact jarDeobf {
+            classifier 'deobf'
+          }
+        }
+        scalaDoc(MavenPublication) {
+            groupId group
+            version project.version
+
+            artifact jarApiScalaDoc {
+                classifier "api-scaladoc"
+            }
+        }
+    }
+    repositories {
+        maven {
+            url "file://${gitPublishConfig.home}/${gitPublishConfig.org}/${gitPublishConfig.repo}/releases"
+        }
+    }
 }
 
 

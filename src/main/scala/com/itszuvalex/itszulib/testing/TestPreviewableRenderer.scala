@@ -10,7 +10,7 @@ import net.minecraft.world.World
 /**
   * Created by Christopher Harris (Itszuvalex) on 8/26/15.
   */
-/*TODO: I really don't know at this point...
+/*TODO: Just the RenderUtils to go...
 class TestPreviewableRenderer extends IPreviewableRenderer {
    /**
     * Coordinates are the location to render at.  This is usually the facing off-set location that, if the player right-clicked, a block would be placed at.

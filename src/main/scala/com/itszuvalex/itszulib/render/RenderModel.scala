@@ -26,7 +26,6 @@ import net.minecraft.util.EnumFacing._
 
 import scala.collection.mutable.ArrayBuffer
 
-/*TODO: Broken
 class RenderModel(var location: Point3D, var center: Point3D) {
   val faces = new ArrayBuffer[RenderQuad]
 
@@ -82,10 +81,10 @@ class RenderModel(var location: Point3D, var center: Point3D) {
   def rotated(x: Double, y: Double, z: Double) = copy.rotateOnXAxis(x).rotateOnYAxis(y).rotateOnZAxis(z)
 
   def draw() {
-    val tes = Tessellator.getInstance()
-    tes.addTranslation(location.x, location.y, location.z)
+    val tes = Tessellator.getInstance().getWorldRenderer
+    tes.setTranslation(location.x, location.y, location.z)
     faces.foreach(_.draw)
-    tes.addTranslation(-location.x, -location.y, -location.z)
+    tes.setTranslation(0, 0, 0)
   }
 
   def rotatedToDirection(dir: EnumFacing) = dir match {
@@ -97,4 +96,3 @@ class RenderModel(var location: Point3D, var center: Point3D) {
     case _ => copy
   }
 }
-//\*/

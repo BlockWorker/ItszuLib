@@ -21,24 +21,17 @@
 package com.itszuvalex.itszulib.render
 
 import net.minecraft.client.renderer.Tessellator
-//import net.minecraft.util.IIcon
-/*TODO: VERY BROKEN
+import net.minecraft.util.ResourceLocation
+
 class RenderQuad(var a: Point3D,
                  var b: Point3D,
                  var c: Point3D,
                  var d: Point3D,
-                 var icon: IIcon,
+                 var icon: ResourceLocation,
                  var minU: Float,
                  var maxU: Float,
                  var minV: Float,
                  var maxV: Float) {
-
-  def this(a: Point3D, b: Point3D, c: Point3D, d: Point3D /*icon: IIcon*/) =
-    this(a, b, c, d /*icon, icon.getMinU, icon.getMaxU, icon.getMinV, icon.getMaxV*/)
-
-  private def this(a: Point3D, b: Point3D, c: Point3D, d: Point3D) =
-    this(a, b, c, d /*null*/)
-
 
   def reverse = {
     var temp = a
@@ -50,7 +43,7 @@ class RenderQuad(var a: Point3D,
     this
   }
 
-  def reversed = new RenderQuad(d.copy, c.copy, b.copy, a.copy /*icon*/, minU, maxU, minV, maxV)
+  def reversed = new RenderQuad(d.copy, c.copy, b.copy, a.copy, icon, minU, maxU, minV, maxV)
 
   def flippedU = copy.flipU
 
@@ -61,7 +54,7 @@ class RenderQuad(var a: Point3D,
     this
   }
 
-  def copy = new RenderQuad(a.copy, b.copy, c.copy, d.copy /*icon*/, minU, maxU, minV, maxV)
+  def copy = new RenderQuad(a.copy, b.copy, c.copy, d.copy, icon, minU, maxU, minV, maxV)
 
   def flippedV = copy.flipV
 
@@ -123,9 +116,9 @@ class RenderQuad(var a: Point3D,
   }
 
   def draw() {
-    val tes = Tessellator.instance
+    val tes = Tessellator.getInstance().getWorldRenderer
     val normal = getNormal
-    tes.setNormal(normal.x.toFloat, normal.y.toFloat, normal.z.toFloat)
+    tes.func_178980_d(normal.x.toFloat, normal.y.toFloat, normal.z.toFloat)
     tes.addVertexWithUV(a.x, a.y, a.z, minU, maxV)
     tes.addVertexWithUV(b.x, b.y, b.z, minU, minV)
     tes.addVertexWithUV(c.x, c.y, c.z, maxU, minV)
@@ -134,4 +127,3 @@ class RenderQuad(var a: Point3D,
 
   def getNormal = new Vector3(c, b).cross(new Vector3(a, b)).normalize()
 }
-//\*/
