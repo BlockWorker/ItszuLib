@@ -1,10 +1,10 @@
 package com.itszuvalex.itszulib.testing
 
-//import com.itszuvalex.itszulib.render.{RenderUtils, ShaderUtils}
+
+import com.itszuvalex.itszulib.render.{ShaderUtils, RenderUtils}
 import net.minecraft.client.Minecraft
 import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer
-import net.minecraft.init.Blocks
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.ResourceLocation
 import org.lwjgl.opengl.GL11
@@ -16,15 +16,15 @@ object RenderPortalTest {
   private val skyLocation    : ResourceLocation = new ResourceLocation("textures/environment/end_sky.png")
   private val pictureLocation: ResourceLocation = new ResourceLocation("textures/entity/end_portal.png")
 }
-/*TODO: Oh boy...
+//*TODO: Oh boy...
 class RenderPortalTest extends TileEntitySpecialRenderer {
-  override def renderTileEntityAt(p_147500_1_ : TileEntity, x: Double, y: Double, z: Double, p_147500_8_ : Float): Unit = {
+  override def renderTileEntityAt(p_147500_1_ : TileEntity, x: Double, y: Double, z: Double, p_147500_8_ : Float, p_147500_9: Int): Unit = {
     //    renderBackground(x, y, z)
 
 //    bindTexture(RenderPortalTest.skyLocation)
 
-    val man = Minecraft.getMinecraft.getTextureManager
-    man.bindTexture(man.getResourceLocation(0))
+//    val man = Minecraft.getMinecraft.getTextureManager
+//    man.bindTexture(man.getResourceLocation(0))
 
 //    GL11.glPushMatrix()
 
@@ -34,7 +34,7 @@ class RenderPortalTest extends TileEntitySpecialRenderer {
 //    GL11.glAlphaFunc(GL11.GL_ALWAYS, 1)
 //    GL11.glEnable(GL11.GL_DEPTH)
 //    GL11.glEnable(GL11.GL_DEPTH_TEST)
-     val icon = Blocks.fire.getFireIcon(0)
+     val icon = Minecraft.getMinecraft.getTextureMapBlocks.getAtlasSprite("minecraft:fire")
     RenderUtils.drawBillboard(x + 0.5, y + 0.5, z + 0.5, 0, .5, icon.getMinU, icon.getMaxU, icon.getMinV, icon.getMaxV)
     GL11.glPopAttrib()
 //
@@ -49,14 +49,14 @@ class RenderPortalTest extends TileEntitySpecialRenderer {
   }
 
   def addBoxVerts(x: Double, y: Double, z: Double): Unit = {
-    val tes = Tessellator.instance
+    val tes = Tessellator.getInstance().getWorldRenderer
     val xmin = 0
     val xmax = 1
     val ymin = 0
     val ymax = 1
     val zmin = 0
     val zmax = 1
-    tes.addTranslation(x.toFloat, y.toFloat, z.toFloat)
+    tes.setTranslation(x.toFloat, y.toFloat, z.toFloat)
     tes.startDrawingQuads()
     //    tes.setColorRGBA_F(.1f, .1f, .1f, 1.0F)
     tes.addVertex(xmin, ymax, zmin)
@@ -88,7 +88,7 @@ class RenderPortalTest extends TileEntitySpecialRenderer {
     tes.addVertex(xmin, ymin, zmax)
     tes.addVertex(xmin, ymax, zmax)
     tes.addVertex(xmin, ymax, zmin)
-    tes.addTranslation(-x.toFloat, -y.toFloat, -z.toFloat)
+    tes.setTranslation(0, 0, 0)
     tes.draw()
   }
 }

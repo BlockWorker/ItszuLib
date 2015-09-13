@@ -1,7 +1,8 @@
 package com.itszuvalex.itszulib.api
 
+import net.minecraft.client.renderer.texture.TextureAtlasSprite
 import net.minecraft.item.ItemStack
-import net.minecraft.util.BlockPos
+import net.minecraft.util.{ResourceLocation, BlockPos}
 import net.minecraft.world.World
 import net.minecraftforge.fml.relauncher.{SideOnly, Side}
 

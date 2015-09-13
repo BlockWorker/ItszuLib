@@ -21,17 +21,20 @@
 package com.itszuvalex.itszulib.render
 
 import net.minecraft.client.renderer.Tessellator
-import net.minecraft.util.ResourceLocation
+import net.minecraft.client.renderer.texture.TextureAtlasSprite
 
 class RenderQuad(var a: Point3D,
                  var b: Point3D,
                  var c: Point3D,
                  var d: Point3D,
-                 var icon: ResourceLocation,
+                 var icon: TextureAtlasSprite,
                  var minU: Float,
                  var maxU: Float,
                  var minV: Float,
                  var maxV: Float) {
+
+  def this(a: Point3D, b: Point3D, c: Point3D, d: Point3D, icon: TextureAtlasSprite) =
+    this(a, b, c, d, icon, icon.getMinU, icon.getMaxU, icon.getMinV, icon.getMaxV)
 
   def reverse = {
     var temp = a
