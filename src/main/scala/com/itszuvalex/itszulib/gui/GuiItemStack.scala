@@ -23,7 +23,8 @@ object GuiItemStack {
 
 class GuiItemStack(override var anchorX: Int,
                    override var anchorY: Int,
-                   var itemStack: ItemStack = null) extends GuiPanel {
+                   var itemStack: ItemStack = null,
+                   var drawSlot: Boolean = true) extends GuiPanel {
 
   override var panelHeight: Int = 18
   override var panelWidth : Int = 18
@@ -32,9 +33,9 @@ class GuiItemStack(override var anchorX: Int,
   var colorLowered    = GuiItemStack.DEFAULT_LOWERED_COLOR
   var colorBackground = GuiItemStack.DEFAULT_BACKGROUND_COLOR
   var colorFont       = GuiItemStack.DEFAULT_FONT_COLOR
-  //TODO: Item renderer broken!!!
-  var itemRenderer    = new RenderItem(Minecraft.getMinecraft.getTextureManager, new ModelManager(Minecraft.getMinecraft.getTextureMapBlocks))
-  var fontRenderer    = Minecraft.getMinecraft.fontRendererObj
+  //TODO: Item renderer broken maybe?
+  val itemRenderer    = new RenderItem(Minecraft.getMinecraft.getTextureManager, new ModelManager(Minecraft.getMinecraft.getTextureMapBlocks))
+  val fontRenderer    = Minecraft.getMinecraft.fontRendererObj
 
   override def addTooltip(mouseX: Int, mouseY: Int, tooltip: ListBuffer[String]): Unit = {
     super.addTooltip(mouseX, mouseY, tooltip)
@@ -44,16 +45,18 @@ class GuiItemStack(override var anchorX: Int,
   override def render(screenX: Int, screenY: Int, mouseX: Int, mouseY: Int, partialTicks: Float): Unit = {
     super.render(screenX, screenY, mouseX, mouseY, partialTicks)
 
-    //Top lowered rect
-    Gui.drawRect(screenX, screenY, screenX + panelWidth, screenY + 1, colorLowered)
-    //Left lowered rect
-    Gui.drawRect(screenX, screenY + 1, screenX + 1, screenY + panelHeight - 1, colorLowered)
-    //Bottom raised rect
-    Gui.drawRect(screenX, screenY + panelHeight - 1, screenX + panelWidth, screenY + panelHeight, colorRaised)
-    //Right raised rect
-    Gui.drawRect(screenX + panelWidth - 1, screenY + 1, screenX + panelWidth, screenY + panelHeight - 1, colorRaised)
-    //Main rect
-    Gui.drawRect(screenX + 1, screenY + 1, screenX + panelWidth - 1, screenY + panelHeight - 1, colorBackground)
+    if (drawSlot) {
+      //Top lowered rect
+      Gui.drawRect(screenX, screenY, screenX + panelWidth, screenY + 1, colorLowered)
+      //Left lowered rect
+      Gui.drawRect(screenX, screenY + 1, screenX + 1, screenY + panelHeight - 1, colorLowered)
+      //Bottom raised rect
+      Gui.drawRect(screenX, screenY + panelHeight - 1, screenX + panelWidth, screenY + panelHeight, colorRaised)
+      //Right raised rect
+      Gui.drawRect(screenX + panelWidth - 1, screenY + 1, screenX + panelWidth, screenY + panelHeight - 1, colorRaised)
+      //Main rect
+      Gui.drawRect(screenX + 1, screenY + 1, screenX + panelWidth - 1, screenY + panelHeight - 1, colorBackground)
+    }
 
     drawItemStack(screenX + 1, screenY + 1, if (itemStack == null) "" else itemStack.stackSize.toString)
   }
