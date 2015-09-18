@@ -33,7 +33,6 @@ class GuiItemStack(override var anchorX: Int,
   var colorLowered    = GuiItemStack.DEFAULT_LOWERED_COLOR
   var colorBackground = GuiItemStack.DEFAULT_BACKGROUND_COLOR
   var colorFont       = GuiItemStack.DEFAULT_FONT_COLOR
-  //TODO: Item renderer broken maybe?
   val itemRenderer    = new RenderItem(Minecraft.getMinecraft.getTextureManager, new ModelManager(Minecraft.getMinecraft.getTextureMapBlocks))
   val fontRenderer    = Minecraft.getMinecraft.fontRendererObj
 
@@ -72,8 +71,8 @@ class GuiItemStack(override var anchorX: Int,
     var font: FontRenderer = null
     if (itemStack != null) font = itemStack.getItem.getFontRenderer(itemStack)
     if (font == null) font = fontRenderer
-    //itemRenderer.renderItemAndEffectIntoGUI(font, Minecraft.getMinecraft.getTextureManager, itemStack, locX, locY)
-    //itemRenderer.renderItemOverlayIntoGUI(font, Minecraft.getMinecraft.getTextureManager, itemStack, locX, locY, amt)
+    itemRenderer.func_180450_b(itemStack, locX, locY)
+    itemRenderer.func_180453_a(font, itemStack, locX, locY, amt)
     itemRenderer.zLevel = 0.0F
     GL11.glPopMatrix()
   }
