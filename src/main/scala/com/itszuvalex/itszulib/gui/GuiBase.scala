@@ -7,6 +7,8 @@ import net.minecraft.inventory.Container
  * Created by Christopher Harris (Itszuvalex) on 10/19/14.
  */
 abstract class GuiBase(c: Container) extends GuiContainer(c) with GuiPanel {
+  def isPointInRegion(x: Int, y: Int, width: Int, height: Int, mouseX: Int, mouseY: Int) = func_146978_c(x, y, width, height, mouseX, mouseY)
+
   override def anchorX = guiLeft
 
   override def anchorX_=(_x: Int) = { guiLeft = _x }
@@ -25,11 +27,7 @@ abstract class GuiBase(c: Container) extends GuiContainer(c) with GuiPanel {
 
   override def drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float): Unit = {
     super.drawScreen(mouseX, mouseY, partialTicks)
-    subElements.foreach(gui => gui.renderUpdate(anchorX + gui.anchorX,
-                                                anchorY + gui.anchorY,
-                                                mouseX - gui.anchorX - anchorX,
-                                                mouseY - gui.anchorY - anchorY,
-                                                partialTicks))
+    renderUpdate(anchorX, anchorY, mouseX - anchorX, mouseY - anchorY, partialTicks)
   }
 
   override def mouseClicked(mouseX: Int, mouseY: Int, button: Int): Unit = {

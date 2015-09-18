@@ -4,7 +4,6 @@ import com.itszuvalex.itszulib.util.Color
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.{FontRenderer, Gui}
 import net.minecraft.client.renderer.entity.RenderItem
-import net.minecraft.client.resources.model.ModelManager
 import net.minecraft.item.ItemStack
 import org.lwjgl.opengl.GL11
 
@@ -24,7 +23,8 @@ object GuiItemStack {
 class GuiItemStack(override var anchorX: Int,
                    override var anchorY: Int,
                    var itemStack: ItemStack = null,
-                   var drawSlot: Boolean = true) extends GuiPanel {
+                   var drawSlot: Boolean = true,
+                   var str: String = null) extends GuiPanel {
 
   override var panelHeight: Int = 18
   override var panelWidth : Int = 18
@@ -33,8 +33,8 @@ class GuiItemStack(override var anchorX: Int,
   var colorLowered    = GuiItemStack.DEFAULT_LOWERED_COLOR
   var colorBackground = GuiItemStack.DEFAULT_BACKGROUND_COLOR
   var colorFont       = GuiItemStack.DEFAULT_FONT_COLOR
-  val itemRenderer    = new RenderItem(Minecraft.getMinecraft.getTextureManager, new ModelManager(Minecraft.getMinecraft.getTextureMapBlocks))
-  val fontRenderer    = Minecraft.getMinecraft.fontRendererObj
+  val itemRenderer    = new RenderItem()
+  val fontRenderer    = Minecraft.getMinecraft.fontRenderer
 
   override def addTooltip(mouseX: Int, mouseY: Int, tooltip: ListBuffer[String]): Unit = {
     super.addTooltip(mouseX, mouseY, tooltip)
@@ -57,7 +57,7 @@ class GuiItemStack(override var anchorX: Int,
       Gui.drawRect(screenX + 1, screenY + 1, screenX + panelWidth - 1, screenY + panelHeight - 1, colorBackground)
     }
 
-    drawItemStack(screenX + 1, screenY + 1, if (itemStack == null) "" else itemStack.stackSize.toString)
+    drawItemStack(screenX + 1, screenY + 1, str)
   }
 
   def drawItemStack(locX: Int, locY: Int, amt: String) {
@@ -71,8 +71,8 @@ class GuiItemStack(override var anchorX: Int,
     var font: FontRenderer = null
     if (itemStack != null) font = itemStack.getItem.getFontRenderer(itemStack)
     if (font == null) font = fontRenderer
-    itemRenderer.func_180450_b(itemStack, locX, locY)
-    itemRenderer.func_180453_a(font, itemStack, locX, locY, amt)
+    itemRenderer.renderItemAndEffectIntoGUI(font, Minecraft.getMinecraft.getTextureManager, itemStack, locX, locY)
+    itemRenderer.renderItemOverlayIntoGUI(font, Minecraft.getMinecraft.getTextureManager, itemStack, locX, locY, amt)
     itemRenderer.zLevel = 0.0F
     GL11.glPopMatrix()
   }

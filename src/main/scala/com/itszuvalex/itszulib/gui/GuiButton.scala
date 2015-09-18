@@ -70,7 +70,7 @@ class GuiButton(override var anchorX: Int,
     else if (isMousedOver)
       Gui.drawRect(screenX, screenY, screenX + panelWidth, screenY + panelWidth, colorHighlight)
 
-    val fr = Minecraft.getMinecraft.fontRendererObj
+    val fr = Minecraft.getMinecraft.fontRenderer
     val lines = fr.listFormattedStringToWidth(text, panelWidth - 2).asInstanceOf[java.util.List[String]]
     var height = 0
     lines.foreach { _ =>
