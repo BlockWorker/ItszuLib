@@ -4,6 +4,7 @@ import com.itszuvalex.itszulib.util.Color
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.{FontRenderer, Gui}
 import net.minecraft.client.renderer.entity.RenderItem
+import net.minecraft.client.resources.model.ModelManager
 import net.minecraft.item.ItemStack
 import org.lwjgl.opengl.GL11
 
@@ -33,8 +34,8 @@ class GuiItemStack(override var anchorX: Int,
   var colorLowered    = GuiItemStack.DEFAULT_LOWERED_COLOR
   var colorBackground = GuiItemStack.DEFAULT_BACKGROUND_COLOR
   var colorFont       = GuiItemStack.DEFAULT_FONT_COLOR
-  val itemRenderer    = new RenderItem()
-  val fontRenderer    = Minecraft.getMinecraft.fontRenderer
+  val itemRenderer    = new RenderItem(Minecraft.getMinecraft.getTextureManager, new ModelManager(Minecraft.getMinecraft.getTextureMapBlocks))
+  val fontRenderer    = Minecraft.getMinecraft.fontRendererObj
 
   override def addTooltip(mouseX: Int, mouseY: Int, tooltip: ListBuffer[String]): Unit = {
     super.addTooltip(mouseX, mouseY, tooltip)
@@ -71,8 +72,8 @@ class GuiItemStack(override var anchorX: Int,
     var font: FontRenderer = null
     if (itemStack != null) font = itemStack.getItem.getFontRenderer(itemStack)
     if (font == null) font = fontRenderer
-    itemRenderer.renderItemAndEffectIntoGUI(font, Minecraft.getMinecraft.getTextureManager, itemStack, locX, locY)
-    itemRenderer.renderItemOverlayIntoGUI(font, Minecraft.getMinecraft.getTextureManager, itemStack, locX, locY, amt)
+    itemRenderer.func_180450_b(itemStack, locX, locY)
+    itemRenderer.func_180453_a(font, itemStack, locX, locY, amt)
     itemRenderer.zLevel = 0.0F
     GL11.glPopMatrix()
   }

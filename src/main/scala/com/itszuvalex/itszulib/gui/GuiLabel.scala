@@ -18,7 +18,7 @@ class GuiLabel(override var anchorX: Int,
   var colorFont    = GuiLabel.DEFAULT_FONT_COLOR
   var xPadding     = 0
   var yPadding     = 0
-  val fontRenderer = Minecraft.getMinecraft.fontRenderer
+  val fontRenderer = Minecraft.getMinecraft.fontRendererObj
 
   override def render(screenX: Int, screenY: Int, mouseX: Int, mouseY: Int, partialTicks: Float): Unit = {
     super.render(screenX, screenY, mouseX, mouseY, partialTicks)
