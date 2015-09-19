@@ -3,6 +3,7 @@ package com.itszuvalex.itszulib.gui
 import com.itszuvalex.itszulib.util.Color
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.{FontRenderer, Gui}
+import net.minecraft.client.renderer.RenderHelper
 import net.minecraft.client.renderer.entity.RenderItem
 import net.minecraft.client.resources.model.ModelManager
 import net.minecraft.item.ItemStack
@@ -72,6 +73,7 @@ class GuiItemStack(override var anchorX: Int,
     var font: FontRenderer = null
     if (itemStack != null) font = itemStack.getItem.getFontRenderer(itemStack)
     if (font == null) font = fontRenderer
+    RenderHelper.enableGUIStandardItemLighting()
     itemRenderer.func_180450_b(itemStack, locX, locY)
     itemRenderer.func_180453_a(font, itemStack, locX, locY, amt)
     itemRenderer.zLevel = 0.0F
