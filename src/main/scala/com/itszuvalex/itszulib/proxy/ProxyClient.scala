@@ -21,7 +21,9 @@
 package com.itszuvalex.itszulib.proxy
 
 import com.itszuvalex.itszulib.render.{PreviewableRenderHandler, PreviewableRendererRegistry, RenderSimpleMachine, ShaderUtils}
-import com.itszuvalex.itszulib.testing.{PortalTileTest, PreviewableIDs, RenderPortalTest, TestPreviewableRenderer}
+import com.itszuvalex.itszulib.testing._
+import net.minecraft.entity.player.EntityPlayer
+import net.minecraft.world.World
 import net.minecraftforge.common.MinecraftForge
 import net.minecraftforge.fml.client.registry.{ClientRegistry, RenderingRegistry}
 
@@ -40,5 +42,12 @@ class ProxyClient extends ProxyCommon {
     //\*/
 
     ClientRegistry.bindTileEntitySpecialRenderer(classOf[PortalTileTest], new RenderPortalTest)
+  }
+
+  override def getClientGuiElement(ID: Int, player: EntityPlayer, world: World, x: Int, y: Int, z: Int): AnyRef = {
+    (ID, world.getTileEntity(x, y, z)) match {
+      case (0, te: TileTankTest) => new GuiTankTest(player, player.inventory, te)
+      case (_, _) => null
+    }
   }
 }

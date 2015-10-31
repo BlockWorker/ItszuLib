@@ -3,6 +3,9 @@ package com.itszuvalex.itszulib.gui
 import net.minecraft.client.gui.inventory.GuiContainer
 import net.minecraft.inventory.Container
 
+import scala.collection.JavaConversions._
+import scala.collection.mutable.ListBuffer
+
 /**
  * Created by Christopher Harris (Itszuvalex) on 10/19/14.
  */
@@ -23,11 +26,6 @@ abstract class GuiBase(c: Container) extends GuiContainer(c) with GuiPanel {
 
   override def panelHeight_=(_height: Int) = { ySize = _height }
 
-  override def drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float): Unit = {
-    super.drawScreen(mouseX, mouseY, partialTicks)
-    renderUpdate(anchorX, anchorY, mouseX - anchorX, mouseY - anchorY, partialTicks)
-  }
-
   override def mouseClicked(mouseX: Int, mouseY: Int, button: Int): Unit = {
     if (!subElements.exists(gui => gui.onMouseClick(mouseX - gui.anchorX - anchorX,
                                                     mouseY - gui.anchorY - anchorY,
@@ -38,5 +36,13 @@ abstract class GuiBase(c: Container) extends GuiContainer(c) with GuiPanel {
   override def updateScreen(): Unit = {
     super.updateScreen()
     subElements.foreach(_.update())
+  }
+
+  override def drawScreen(mouseX: Int, mouseY: Int, partialTicks: Float): Unit = {
+    super.drawScreen(mouseX, mouseY, partialTicks)
+    renderUpdate(anchorX, anchorY, mouseX - anchorX, mouseY - anchorY, partialTicks)
+    val tooltipList = new ListBuffer[String]
+    subElements.foreach( gui => if (gui.isMousedOver) gui.addTooltip(mouseX, mouseY, tooltipList) )
+    if (tooltipList.nonEmpty) drawHoveringText(tooltipList.toList, mouseX, mouseY, fontRendererObj)
   }
 }

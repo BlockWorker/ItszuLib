@@ -14,6 +14,9 @@ object PacketHandler {
   def init(): Unit = {
     INSTANCE.registerMessage(classOf[MessageContainerUpdate], classOf[MessageContainerUpdate], 0, Side.CLIENT)
     INSTANCE.registerMessage(classOf[MessagePlayerProperty], classOf[MessagePlayerProperty], 1, Side.CLIENT)
+    INSTANCE.registerMessage(classOf[MessageFluidSlotClick], classOf[MessageFluidSlotClick], 2, Side.SERVER)
+    INSTANCE.registerMessage(classOf[MessageFluidTankUpdate], classOf[MessageFluidTankUpdate], 3, Side.CLIENT)
+    INSTANCE.registerMessage(classOf[MessageUpdateGuiItemStack], classOf[MessageUpdateGuiItemStack], 4, Side.CLIENT)
   }
 
 }

@@ -28,11 +28,13 @@ object ItszuLib {
     //    PlayerUUIDTracker.init()
     //    PlayerUUIDTracker.setFile(new File())
     proxy.init()
+    NetworkRegistry.INSTANCE.registerGuiHandler(this, proxy)
   }
 
   @EventHandler def load(event: FMLInitializationEvent): Unit = {
     GameRegistry.registerBlock(new BlockPortalTest, "BlockPortalTest").setCreativeTab(CreativeTabs.tabBlock)
     GameRegistry.registerBlock(new BlockLocTrackerTest, "BlockLocTrackerTest").setCreativeTab(CreativeTabs.tabBlock)
+    GameRegistry.registerBlock(new BlockTankTest, "BlockTankTest").setCreativeTab(CreativeTabs.tabBlock)
     val prev = new ItemPreviewable
     prev.setCreativeTab(CreativeTabs.tabDecorations)
     GameRegistry.registerItem(prev, "TilePreviewable")
