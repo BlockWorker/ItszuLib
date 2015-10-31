@@ -1,14 +1,15 @@
 package com.itszuvalex.itszulib.network.messages
 
-import cpw.mods.fml.common.network.simpleimpl.{IMessage, IMessageHandler, MessageContext}
 import io.netty.buffer.ByteBuf
 import net.minecraft.client.Minecraft
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.{CompressedStreamTools, NBTSizeTracker, NBTTagCompound}
+import net.minecraft.nbt.NBTTagCompound
+import net.minecraftforge.fml.common.network.simpleimpl.{IMessage, IMessageHandler, MessageContext}
 
 /**
   * Created by Alex on 11.10.2015.
   */
+//TODO: Fix
 class MessageUpdateGuiItemStack(var stack: NBTTagCompound) extends IMessage with IMessageHandler[MessageUpdateGuiItemStack, IMessage] {
   def this() = this(null)
 
@@ -17,9 +18,9 @@ class MessageUpdateGuiItemStack(var stack: NBTTagCompound) extends IMessage with
       buf.writeShort(-1)
     }
     else {
-      val abyte: Array[Byte] = CompressedStreamTools.compress(stack)
+      /*val abyte: Array[Byte] = CompressedStreamTools.compress(stack)
       buf.writeShort(abyte.length.toShort)
-      buf.writeBytes(abyte)
+      buf.writeBytes(abyte)*/
     }
   }
 
@@ -32,7 +33,7 @@ class MessageUpdateGuiItemStack(var stack: NBTTagCompound) extends IMessage with
     else {
       val abyte: Array[Byte] = new Array[Byte](short1)
       buf.readBytes(abyte)
-      stack = CompressedStreamTools.func_152457_a(abyte, new NBTSizeTracker(2097152L))
+      //stack = CompressedStreamTools.func_152456_a(abyte, new NBTSizeTracker(2097152L))
     }
   }
 

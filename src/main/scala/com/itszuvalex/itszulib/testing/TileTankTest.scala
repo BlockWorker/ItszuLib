@@ -4,8 +4,7 @@ import com.itszuvalex.itszulib.ItszuLib
 import com.itszuvalex.itszulib.core.TileEntityBase
 import com.itszuvalex.itszulib.core.traits.tile.TileMultiFluidTank
 import net.minecraft.entity.player.EntityPlayer
-import net.minecraft.nbt.NBTTagCompound
-import net.minecraftforge.common.util.ForgeDirection
+import net.minecraft.util.EnumFacing
 import net.minecraftforge.fluids.{Fluid, FluidStack, FluidTank}
 
 /**
@@ -15,22 +14,22 @@ class TileTankTest extends TileEntityBase with TileMultiFluidTank {
 
   override def getMod: AnyRef = ItszuLib
 
-  override def drain(from: ForgeDirection, resource: FluidStack, doDrain: Boolean): FluidStack = null
+  override def drain(from: EnumFacing, resource: FluidStack, doDrain: Boolean): FluidStack = null
 
   override def defaultTanks: Array[FluidTank] = Array(new FluidTank(10000), new FluidTank(5000), new FluidTank(2000))
 
-  override def fill(from: ForgeDirection, resource: FluidStack, doFill: Boolean): Int = 0
+  override def fill(from: EnumFacing, resource: FluidStack, doFill: Boolean): Int = 0
 
-  override def drain(from: ForgeDirection, maxDrain: Int, doDrain: Boolean): FluidStack = null
+  override def drain(from: EnumFacing, maxDrain: Int, doDrain: Boolean): FluidStack = null
 
-  override def canFill(from: ForgeDirection, fluid: Fluid): Boolean = false
+  override def canFill(from: EnumFacing, fluid: Fluid): Boolean = false
 
-  override def canDrain(from: ForgeDirection, fluid: Fluid): Boolean = false
+  override def canDrain(from: EnumFacing, fluid: Fluid): Boolean = false
 
   override def hasDescription: Boolean = true
 
-  override def onSideActivate(player: EntityPlayer, side: Int): Boolean = {
-    player.openGui(getMod, 0, worldObj, xCoord, yCoord, zCoord)
+  override def onSideActivate(player: EntityPlayer, side: EnumFacing): Boolean = {
+    player.openGui(getMod, 0, worldObj, pos.getX, pos.getY, pos.getZ)
     true
   }
 

@@ -6,7 +6,8 @@ import com.itszuvalex.itszulib.network.messages.MessageFluidSlotClick
 import com.itszuvalex.itszulib.render.RenderUtils
 import com.itszuvalex.itszulib.util.Color
 import net.minecraft.client.gui.Gui
-import net.minecraft.util.{EnumChatFormatting, IIcon}
+import net.minecraft.client.renderer.texture.TextureAtlasSprite
+import net.minecraft.util.EnumChatFormatting
 import net.minecraftforge.fluids._
 
 import scala.collection.mutable.ListBuffer
@@ -96,9 +97,9 @@ class GuiFluidTank(override var anchorX: Int,
     if (manualAccess != 0 && isMousedOver) {
       tankID match {
         case -1 =>
-          PacketHandler.INSTANCE.sendToServer(new MessageFluidSlotClick(tileSingleTank.xCoord, tileSingleTank.yCoord, tileSingleTank.zCoord, -1, button, manualAccess, if (filterFluid == null) -1 else filterFluid.getID))
+          PacketHandler.INSTANCE.sendToServer(new MessageFluidSlotClick(tileSingleTank.getPos.getX, tileSingleTank.getPos.getY, tileSingleTank.getPos.getZ, -1, button, manualAccess, if (filterFluid == null) -1 else filterFluid.getID))
         case _ =>
-          PacketHandler.INSTANCE.sendToServer(new MessageFluidSlotClick(tileMultiTank.xCoord, tileMultiTank.yCoord, tileMultiTank.zCoord, tankID, button, manualAccess, if (filterFluid == null) -1 else filterFluid.getID))
+          PacketHandler.INSTANCE.sendToServer(new MessageFluidSlotClick(tileMultiTank.getPos.getX, tileMultiTank.getPos.getY, tileMultiTank.getPos.getZ, tankID, button, manualAccess, if (filterFluid == null) -1 else filterFluid.getID))
       }
     }
     super.onMouseClick(mouseX, mouseY, button)
@@ -144,7 +145,7 @@ class GuiFluidTank(override var anchorX: Int,
 
   def drawFluid(screenX: Int, screenY: Int): Unit = {
     var height: Int = 0
-    var icon: IIcon = null
+    var icon: TextureAtlasSprite = null
     tankID match {
       case -1 =>
         if (tileSingleTank.tank.getFluid == null) return

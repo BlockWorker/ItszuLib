@@ -1,7 +1,7 @@
 package com.itszuvalex.itszulib.network
 
 import com.itszuvalex.itszulib.ItszuLib
-import com.itszuvalex.itszulib.network.messages.{MessageContainerUpdate, MessagePlayerProperty}
+import com.itszuvalex.itszulib.network.messages._
 import net.minecraftforge.fml.common.network.NetworkRegistry
 import net.minecraftforge.fml.relauncher.Side
 

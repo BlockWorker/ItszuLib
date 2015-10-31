@@ -2,12 +2,13 @@ package com.itszuvalex.itszulib
 
 import com.itszuvalex.itszulib.network.PacketHandler
 import com.itszuvalex.itszulib.proxy.ProxyCommon
-import com.itszuvalex.itszulib.testing.{BlockLocTrackerTest, BlockPortalTest, ItemPreviewable}
+import com.itszuvalex.itszulib.testing.{BlockLocTrackerTest, BlockPortalTest, BlockTankTest, ItemPreviewable}
 import net.minecraft.creativetab.CreativeTabs
 import net.minecraftforge.fml.common.Mod.EventHandler
-import net.minecraftforge.fml.common.event.{FMLInterModComms, FMLPostInitializationEvent, FMLInitializationEvent, FMLPreInitializationEvent}
+import net.minecraftforge.fml.common.event.{FMLInitializationEvent, FMLInterModComms, FMLPostInitializationEvent, FMLPreInitializationEvent}
+import net.minecraftforge.fml.common.network.NetworkRegistry
 import net.minecraftforge.fml.common.registry.GameRegistry
-import net.minecraftforge.fml.common.{SidedProxy, Mod}
+import net.minecraftforge.fml.common.{Mod, SidedProxy}
 import org.apache.logging.log4j.LogManager
 
 /**

@@ -38,7 +38,7 @@ trait MultiBlockComponent extends TileEntityBase with IMultiBlockComponent {
 
   def forwardToController[T, B](f: T => B): B = {
     if (isValidMultiBlock)
-      Loc4(info.getControllerPos, worldObj.provider.getDimensionId).getTileEntity(true).orNull match {
+      Loc4(info.getControllerPos, getWorld.provider.getDimensionId).getTileEntity(true).orNull match {
         case null =>
         case a: T => return f(a)
         case _    =>
